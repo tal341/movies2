@@ -259,7 +259,9 @@
     .download-btn,
     .reset-btn,
     .save-btn,
-    .recommend-btn {
+    .recommend-btn,
+    .settings-btn,
+    .help-btn {
       display: block;
       margin: 15px auto;
       padding: 12px 24px;
@@ -306,6 +308,22 @@
     }
     .recommend-btn:hover {
       background: rgba(80,50,100,0.9);
+    }
+
+    .settings-btn {
+      background: rgba(40,40,60,0.7);
+      border-color: rgba(100,100,150,0.4);
+    }
+    .settings-btn:hover {
+      background: rgba(50,50,80,0.9);
+    }
+
+    .help-btn {
+      background: rgba(40,60,40,0.7);
+      border-color: rgba(100,150,100,0.4);
+    }
+    .help-btn:hover {
+      background: rgba(50,80,50,0.9);
     }
 
     /* שמירה מקומית */
@@ -376,18 +394,109 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     }
 
-    /* תצוגה ל-Mobile - תצוגה מוגדרת */
-    @media (max-width: 768px) {
-      .recommendations {
-        margin: 20px auto;
-        padding: 15px;
-      }
-      #recommendationsContainer {
-        gap: 8px;
-      }
-      .recommend-poster {
-        width: 80px;
-      }
+    /* תפריט דירוג */
+    .rating-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10,10,10,0.95);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      z-index: 1000;
+      display: none;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .rating-modal h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffdd55;
+      font-size: 24px;
+    }
+
+    .rating-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .rating-btn {
+      background: rgba(60,60,60,0.8);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .rating-btn:hover {
+      background: rgba(80,80,80,0.9);
+    }
+
+    .rating-btn.SSS {
+      background: linear-gradient(135deg, #ff3333, #cc0000);
+    }
+
+    .rating-btn.SS {
+      background: linear-gradient(135deg, #ff9900, #cc6600);
+    }
+
+    .rating-btn.S {
+      background: linear-gradient(135deg, #ffcc00, #cc9900);
+    }
+
+    .rating-btn.Ap {
+      background: linear-gradient(135deg, #66ff66, #33cc33);
+    }
+
+    .rating-btn.B {
+      background: linear-gradient(135deg, #6699ff, #3366cc);
+    }
+
+    .rating-btn.C {
+      background: linear-gradient(135deg, #cc66cc, #993399);
+    }
+
+    /* חלון עזרה */
+    .help-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10,10,10,0.95);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      z-index: 1000;
+      display: none;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .help-modal h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffdd55;
+      font-size: 24px;
+    }
+
+    .help-content {
+      line-height: 1.6;
+      font-size: 16px;
+      color: #ddd;
+    }
+
+    .help-content a {
+      color: #ffdd55;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -396,6 +505,8 @@
     <h1>🎬 TaL's Movie Universe</h1>
     <button id="shareBtn" class="share-btn" title="Share this page">📤 Share</button>
     <span class="made-by">Made by <strong>TaL.S</strong></span>
+    <button id="settingsBtn" class="settings-btn" title="Settings">⚙️ Settings</button>
+    <button id="helpBtn" class="help-btn" title="Help">❓ Help</button>
   </header>
 
   <div class="tier-list">
@@ -430,50 +541,78 @@
     <div id="recommendationsContainer"></div>
   </div>
 
+  <!-- תפריט דירוג -->
+  <div class="rating-modal" id="ratingModal">
+    <h3>Where to rank this movie?</h3>
+    <div class="rating-buttons">
+      <button class="rating-btn SSS">SSS</button>
+      <button class="rating-btn SS">SS</button>
+      <button class="rating-btn S">S</button>
+      <button class="rating-btn Ap">A+</button>
+      <button class="rating-btn B">B</button>
+      <button class="rating-btn C">C</button>
+    </div>
+    <button id="closeRatingModal" class="rating-btn" style="margin-top: 15px; background: rgba(80,80,80,0.8);">Cancel</button>
+  </div>
+
+  <!-- חלון עזרה -->
+  <div class="help-modal" id="helpModal">
+    <h3>How to use TaL's Movie Universe</h3>
+    <div class="help-content">
+      <p>1. <strong>Search movies:</strong> Type movie name in the search box and press Enter.</p>
+      <p>2. <strong>Upload posters:</strong> Click "Choose Files" to upload movie posters manually.</p>
+      <p>3. <strong>Rank movies:</strong></p>
+      <ul>
+        <li><strong>On desktop:</strong> Drag and drop movies to any tier.</li>
+        <li><strong>On mobile:</strong> Tap on a movie to open a quick rating menu.</li>
+      </ul>
+      <p>4. <strong>Save your list:</strong> Use "Save Current List" to store your ranking.</p>
+      <p>5. <strong>Share with friends:</strong> Click "Share" to send the link via WhatsApp, SMS, etc.</p>
+      <p>6. <strong>Settings:</strong> Toggle between "Drag" and "Tap" mode in Settings.</p>
+    </div>
+    <button id="closeHelpModal" class="rating-btn" style="margin-top: 15px; background: rgba(80,80,80,0.8);">Close</button>
+  </div>
+
   <script>
     const fileInput = document.getElementById('fileInput');
     const movieInput = document.getElementById('movieInput');
     const unranked = document.getElementById('unranked-area');
     const tiers = document.querySelectorAll('.tier');
     const OMDB_API_KEY = "ee77ebb9";
+    const ratingModal = document.getElementById('ratingModal');
+    const helpModal = document.getElementById('helpModal');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const helpBtn = document.getElementById('helpBtn');
+    const closeRatingModal = document.getElementById('closeRatingModal');
+    const closeHelpModal = document.getElementById('closeHelpModal');
+    const ratingButtons = document.querySelectorAll('.rating-btn');
+    const currentMode = localStorage.getItem('movieTierMode') || 'drag';
 
-    // 📱 תמיכה בטלפון – גרירה עם אצבע (משופרת)
-    let draggedElement = null;
-    let dragStartX = 0;
-    let dragStartY = 0;
+    // הגדרות מודל
+    function showRatingModal(img) {
+      const currentImg = img;
+      ratingModal.style.display = 'block';
+      
+      ratingButtons.forEach(btn => {
+        btn.onclick = () => {
+          const tier = document.querySelector(`.tier[data-tier="${btn.classList[1]}"]`);
+          tier.appendChild(currentImg);
+          ratingModal.style.display = 'none';
+        };
+      });
+      
+      closeRatingModal.onclick = () => {
+        ratingModal.style.display = 'none';
+      };
+    }
 
-    document.addEventListener('touchstart', e => {
-      const target = e.target.closest('.poster');
-      if (!target) return;
-      draggedElement = target;
-      dragStartX = e.touches[0].clientX;
-      dragStartY = e.touches[0].clientY;
-      draggedElement.style.opacity = '0.7';
-      draggedElement.style.transform = 'scale(1.05)';
-    }, { passive: false });
-
-    document.addEventListener('touchmove', e => {
-      if (!draggedElement) return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      const diffX = touch.clientX - dragStartX;
-      const diffY = touch.clientY - dragStartY;
-      dragStartX = touch.clientX;
-      dragStartY = touch.clientY;
-    }, { passive: false });
-
-    document.addEventListener('touchend', e => {
-      if (!draggedElement) return;
-      const touch = e.changedTouches[0];
-      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-      const dropZone = elementBelow?.closest('.tier, #unranked-area');
-      if (dropZone) {
-        dropZone.appendChild(draggedElement);
-      }
-      draggedElement.style.opacity = '';
-      draggedElement.style.transform = '';
-      draggedElement = null;
-    });
+    // חלון עזרה
+    function showHelpModal() {
+      helpModal.style.display = 'block';
+      closeHelpModal.onclick = () => {
+        helpModal.style.display = 'none';
+      };
+    }
 
     // חיפוש סרט
     movieInput.addEventListener('keypress', async (e) => {
@@ -499,6 +638,11 @@
           img.draggable = true;
           img.dataset.movieTitle = data.Title;
           img.dataset.genre = data.Genre || '';
+          img.addEventListener('click', () => {
+            if (currentMode === 'tap') {
+              showRatingModal(img);
+            }
+          });
           img.addEventListener('dragstart', dragStart);
           img.onload = () => {
             unranked.appendChild(img);
@@ -527,6 +671,11 @@
           img.classList.add('poster');
           img.draggable = true;
           img.dataset.originalSrc = e.target.result;
+          img.addEventListener('click', () => {
+            if (currentMode === 'tap') {
+              showRatingModal(img);
+            }
+          });
           img.addEventListener('dragstart', dragStart);
           unranked.appendChild(img);
         };
@@ -540,17 +689,11 @@
 
     tiers.forEach(tier => {
       tier.addEventListener('dragover', (e) => e.preventDefault());
-      tier.addEventListener('drop', async (e) => {
+      tier.addEventListener('drop', (e) => {
         e.preventDefault();
         const src = e.dataTransfer.getData('text/plain');
         const img = document.querySelector(`img[src='${src}']`);
-        if (img) {
-          tier.appendChild(img);
-          // אם הסרט ב-SSS או SS, מציג את רכיב המלצה
-          if (tier.dataset.tier === 'SSS' || tier.dataset.tier === 'SS') {
-            showRecommendationButton(img);
-          }
-        }
+        if (img) tier.appendChild(img);
       });
     });
 
@@ -635,6 +778,11 @@
         img.dataset.genre = poster.genre;
         img.classList.add('poster');
         img.draggable = true;
+        img.addEventListener('click', () => {
+          if (currentMode === 'tap') {
+            showRatingModal(img);
+          }
+        });
         img.addEventListener('dragstart', dragStart);
         unranked.appendChild(img);
       });
@@ -725,8 +873,34 @@
         img.classList.add('recommend-poster');
         img.draggable = true;
         img.addEventListener('dragstart', dragStart);
+        img.addEventListener('click', () => {
+          if (currentMode === 'tap') {
+            showRatingModal(img);
+          }
+        });
         container.appendChild(img);
       });
+    }
+
+    // הגדרות
+    settingsBtn.addEventListener('click', () => {
+      const mode = currentMode === 'drag' ? 'tap' : 'drag';
+      localStorage.setItem('movieTierMode', mode);
+      currentMode = mode;
+      alert(`Mode changed to: ${mode === 'drag' ? 'Drag' : 'Tap'}`);
+    });
+
+    helpBtn.addEventListener('click', showHelpModal);
+
+    // סגירת חלונות
+    closeHelpModal.addEventListener('click', () => {
+      helpModal.style.display = 'none';
+    });
+
+    // הפעלת חלון עזרה פעם אחת
+    if (!localStorage.getItem('helpShown')) {
+      setTimeout(showHelpModal, 2000);
+      localStorage.setItem('helpShown', 'true');
     }
   </script>
 </body>
